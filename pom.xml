@@ -1,0 +1,45 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.github.boly38</groupId>
+	<artifactId>roger</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>module_webapp</module>
+	</modules>
+
+
+	<properties>
+		<maven.deploy.skip>false</maven.deploy.skip>
+		<maven.javadoc.skip>true</maven.javadoc.skip>
+
+		<!--General project configuration -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<project-home>${project.artifactId}</project-home>
+		<projectFinalName>roger</projectFinalName>
+
+		<!-- build info -->
+		<maven.build.timestamp.format>yyyyMMdd_HHmm</maven.build.timestamp.format>
+		<build.version>${maven.build.timestamp}</build.version>
+		<buildVersion>${maven.build.timestamp}</buildVersion>
+
+		<maven-compiler-plugin.version>3.0</maven-compiler-plugin.version>
+		<source.level>1.7</source.level>
+	</properties>
+
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- Servlet -->
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>3.1.0</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+</project>

@@ -1,0 +1,219 @@
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.header,
+.marketing,
+.footer {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+
+
+.header {
+    position: relative;
+    top: 5px;
+    display: block;
+    clear: both;
+}
+
+.apphead {
+    padding: 1px;
+    height: 70px;
+    display: block;
+}
+
+
+
+.rogertitle {
+    display: table;
+    top: 0px;
+    position: relative
+}
+
+.rogertitle .logo {
+    margin: 7px;
+    height: 30px;
+}
+
+.rogertitle h1 {
+    color: #009530;
+    font-size: 20px;
+    display: table-cell;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+
+
+.rogermenu {
+  float: right;
+  list-style: none;
+  /*
+  border-top: 0.1em solid lightgrey;
+  border-bottom: 0.1em solid lightgrey;
+  padding: 0.5em 0 0.5em 0;
+  */
+  z-index: 10;
+  position: absolute;
+  top: 4px;
+  right: 0;
+}
+
+
+.rogermenu>nav>ul {
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none
+}
+
+.rogermenu>nav>ul>li {
+    padding: 0px 3px;
+    border-left: 1px;
+    border-left-color: #ccc;
+    border-left-style: solid;
+    display: inline-block
+}
+
+.rogermenu>nav>ul>li>a {
+    cursor: pointer;
+    color: #5aba17;
+}
+
+.rogermenu>nav>ul>li:first-child {
+    border-left-style: none;
+    /* 
+    background-image: url("../../img/dl-icon-user.png");
+    background-repeat: no-repeat;
+    background-position: top left;
+    background-size: 12px;
+    padding-left: 16px
+     */
+}
+
+.rogermenu>nav>ul>li:hover>a {
+    color: #87d200
+    font-weight: bold;
+}
+
+.rogermenu > li {
+  display: inline;
+}
+
+.rogermenu > li:before {
+  content: "|";
+  padding-right: 0.3em;
+}
+
+.rogermenu > li:nth-child(1):before {
+  content: "";
+  padding: 0;
+}
+
+
+.avatar {
+    width: 24px;
+    max-height: 30px;
+    border-radius: 100px;
+    margin-right: 5px;
+}
+
+/* Custom page footer */
+.footer {
+  padding-top: 19px;
+  color: #777;
+  border-top: 1px solid #e5e5e5;
+}
+
+/* Customize container */
+@media (min-width: 768px) {
+  .container {
+    max-width: 730px;
+  }
+}
+.container-narrow > hr {
+  margin: 30px 0;
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+  text-align: center;
+  border-bottom: 1px solid #e5e5e5;
+}
+.jumbotron .btn {
+  padding: 14px 24px;
+  font-size: 21px;
+}
+
+/* Supporting marketing content */
+.marketing {
+  margin: 40px 0;
+}
+.marketing p + h4 {
+  margin-top: 28px;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+  /* Remove the padding we set earlier */
+  .header,
+  .marketing,
+  .footer {
+    padding-right: 0;
+    padding-left: 0;
+  }
+  /* Space out the masthead */
+  .header {
+    margin-bottom: 30px;
+  }
+  /* Remove the bottom border on the jumbotron for visual effect */
+  .jumbotron {
+    border-bottom: 0;
+  }
+}
+
+.navopt {
+    padding-left: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+
+.loader-mask {
+	position: absolute;
+	left:40%;
+	top: 20%;
+}
+
+.green {
+    color:green;
+}
+.red {
+    color:red;
+}
+.admincolor{
+    color:#FF8000;
+}
+.disabledbg {
+    background-color:#BDBDBD;
+}
+.adminbg{
+    background-color:#F5ECCE;
+}
+.todo {
+    color:purple;
+}
+
+.floatright {
+	float:right; 
+	padding-left: 10px;
+}
+
+.navbar-brand {
+    float: left;
+    height: 40px;
+    padding: 10px 10px;
+    font-size: 18px;
+    line-height: 20px;
+}
+
+.gamebackground {
+	background-color: lightyellow;
+}
