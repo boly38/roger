@@ -26,6 +26,14 @@ function GameImageManager($scope, $parentId) {
 	
 };
 
+/**
+ * image map : http://jsfiddle.net/bL5rgstg/
+ * canvas    : http://jsfiddle.net/ArtBIT/kneDX/
+ * img coord : http://stackoverflow.com/questions/2159044/getting-the-x-y-coordinates-of-a-mouse-click-on-an-image-with-jquery
+ * @param $scope
+ * @param $http
+ * @param commonService
+ */
 function gameController($scope, $http, commonService) {
     commonService.commonControler($scope);
     $scope.controlerName = "GameCtrl";
