@@ -23,10 +23,14 @@ function commonServicesImpl($location, $timeout, $http) {
   this.commonControler = function($scope) {
     $scope.applicationName = "Roger";
     $scope.goToDashboard = this.goToDashboard;
+    $scope.goToGame = this.goToGame;
   };
 
   this.goToDashboard = function() {
     $location.path('/');
+  };
+  this.goToGame = function() {
+    $location.path('/jeu');
   };
 
 

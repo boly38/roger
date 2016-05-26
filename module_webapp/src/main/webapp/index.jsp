@@ -9,7 +9,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Roger d&eacute;m&eacute;nage</title>
-        <!-- <link rel="shortcut icon" href="../favicon.ico"/>   -->
+        <link rel="shortcut icon" href="../img/camionjaune.ico"/>
         <meta name="author" content="boly38"/>
         <meta name="description" content="Roger est un jeu"/>
 

@@ -12,13 +12,17 @@ rogerApp.config(
    function($routeProvider, $httpProvider){
     console.info("configure ROGER");
     $routeProvider
-      .when('/',{
-          controller:  'DashboardCtrl as ctrl',
-          templateUrl: 'partials/dashboard.html'
-      })
-      .otherwise({ 
+    .when('/',{
+        controller:  'DashboardCtrl as ctrl',
+        templateUrl: 'partials/dashboard.html'
+    })
+    .when('/jeu',{
+          controller:  'GameCtrl as ctrl',
+          templateUrl: 'partials/game.html'
+    })
+    .otherwise({ 
         template: '<h1>Not Found</h1>'
-      });
+    });
 })
 .run(function($rootScope, $window) {
 	console.info("run ROGER");

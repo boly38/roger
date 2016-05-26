@@ -214,6 +214,21 @@
     line-height: 20px;
 }
 
+area {
+	cursor: default;
+}
 .gamebackground {
 	background-color: lightyellow;
 }
+.gamegreen {
+	border: 1px solid green;
+	min-height: 400px;
+}
+#imggame{
+	float: left;
+}
+.gamecanvas {
+    border:1px solid blue;
+    position:absolute;
+    zIndex: 10;
+ }
