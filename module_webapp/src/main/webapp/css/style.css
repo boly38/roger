@@ -221,14 +221,27 @@ area {
 	background-color: lightyellow;
 }
 .gamegreen {
+	top: 20px;
 	border: 1px solid green;
 	min-height: 400px;
 }
 #imggame{
 	float: left;
+	z-index: 1;
 }
 .gamecanvas {
     border:1px solid blue;
     position:absolute;
     zIndex: 10;
  }
+
+.imgcomponent {
+	float: left;
+	color: blue;
+	background-color: lightyellow;
+	z-index: 10; 
+	position: relative;
+	margin-bottom: -20px; /* src: http://stackoverflow.com/questions/18339549/floating-div-over-an-image */
+	padding-left: 5px;
+	padding-right: 5px;
+}

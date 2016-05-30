@@ -20,6 +20,10 @@ rogerApp.config(
           controller:  'GameCtrl as ctrl',
           templateUrl: 'partials/game.html'
     })
+    .when('/win',{
+        controller:  'WinCtrl as ctrl',
+        templateUrl: 'partials/win.html'
+    })
     .otherwise({ 
         template: '<h1>Not Found</h1>'
     });

@@ -1,5 +1,7 @@
 <ul class="nav nav-pills">
   <li class="navbar-brand">Jeu pour enfants</li>
   <li role="presentation" class="pull-right">
-       <a href=""  ng-click="play()">Jouer</a></li>
+       <a href=""  ng-click="play()" ng-show="win">Retour</a>
+       <a href=""  ng-click="play()" ng-hide="win">Jouer</a>
+  </li>
 </ul>

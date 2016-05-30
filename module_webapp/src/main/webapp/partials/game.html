@@ -1,16 +1,42 @@
 <div class="container gamebackground">
     <div class="apphead" apphead></div>
+
+   	<div>
+    	<p>
+    	Tu dois retrouver :
+    		<ul>
+    			<li>un landau</li>
+    			<li>un miroir</li>
+    		</ul>
+    	</p>
+   	</div>
     
     <div class="gamegreen">
+    	<div class="imgcomponent" ng-show="icmiroir" style="left: 500px; top: 110px;">miroir</div>
+    	<div class="imgcomponent" ng-show="iclandau" style="left: 360px; top: 250px;">landau</div>
+    	<div class="imgcomponent" ng-show="icgagne" style="left: 250px; top: 50px;">GAGN&Eacute; !</div>
 		<img id="imggame" 
-			 src="http://www.w3schools.com/tags/planets.gif" 
-			 width="145" height="126" alt="Planets" usemap="#planetmap"/>
-	  	<map name="planetmap">
+			 src="/data/1/old-room-1530324.jpg" 
+			 width="700" alt="room" usemap="#gamemap">
+		</img>
+	  	<map name="gamemap" id="gamemap">
+	  		<!-- mirror -->
+	  	    <area class="miroir" ng-click="miroir($event)"  shape="poly"
+	  	    	  coords="475,144,479,51,571,51,578,54,561,215,549,215,479,198,475,158" href="" />
+	  	    <!-- landau -->
+	  	    <area class="landau" ng-click="landau($event)"  shape="poly"
+	  	    	  coords="277,342,277,340,270,334,273,309,276,303,277,239,283,235,295,236,388,232,420,173,424,161,428,128,433,128,437,133,463,133,473,146,491,246,497,353" href="" />
+		    <area class="allImg" shape="rect"   coords="0,0,700,700" href="" />
+		</map>
+		<!--
+			http://imagemap-generator.dariodomi.de/
+			http://fr.freeimages.com/search/room?free=1
+			image 700
 		    <area class="yellow" shape="rect"   coords="0,0,82,126" href="" />
 		    <area class="red"	 shape="circle" coords="90,58,3"    href="" />
 		    <area class="objA"   shape="circle" coords="124,58,8"   href="" />
-		    <area class="allImg" shape="rect"   coords="0,0,145,126" href="" />
-		</map>
+		 
+		 -->
     </div>
     <a href="" ng-click="dashboard()">quitter</a>
 	<div appfooter></div>
