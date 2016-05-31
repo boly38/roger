@@ -10,7 +10,10 @@ function dashboardController($scope, $http, commonService) {
     
     $scope.play = function() {
     	commonService.goToGame();
-   };
+    };
+    $scope.playdev = function() {
+    	commonService.goToGameDev();
+    };
 };
 
 
@@ -105,8 +108,27 @@ function winController($scope, $http, commonService) {
    };
 };
 
-
+function gameDevController($scope, $http, commonService) {
+    commonService.commonControler($scope);
+    $scope.controlerName = "GameDevCtrl";
+    commonService.info("GameDevCtrl");
+    
+    $scope.dashboard = function() {
+    	commonService.goToDashboard();
+    };
+    
+    $http.get('/data/1/game.json').then(function(success){
+        $scope.game = success.data;
+        commonService.info('load ' + success.data.alt + ' img:' + success.data.image);
+        // http://stackoverflow.com/questions/19310215/angularjs-image-src-change-when-model-changes
+        $scope.gameimage="/data/1/" + success.data.image;
+        $scope.gamealt = success.data.alt;
+    }, function(error){
+    	commonService.info('No game.');
+    });
+};
 
 rogerControllers.controller('DashboardCtrl', dashboardController);
 rogerControllers.controller('GameCtrl',      gameController);
 rogerControllers.controller('WinCtrl',       winController);
+rogerControllers.controller('GameDevCtrl',      gameDevController);

@@ -1,0 +1,13 @@
+{
+ "image":"old-room-1530324.jpg",
+ "alt":"room",
+ "width":"700",
+ "components":[
+   {"id":"icmiroir",
+ 	"name":"miroir",
+ 	"left":"500px",
+ 	"top":"110px",
+ 	"shape":"poly",
+ 	"coord":"475,144,479,51,571,51,578,54,561,215,549,215,479,198,475,158"}
+ ]
+}

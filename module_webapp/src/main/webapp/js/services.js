@@ -24,6 +24,7 @@ function commonServicesImpl($location, $timeout, $http) {
     $scope.applicationName = "Roger";
     $scope.goToDashboard = this.goToDashboard;
     $scope.goToGame = this.goToGame;
+    $scope.goToGameDev = this.goToGameDev;
     $scope.goToWin = this.goToWin;
   };
 
@@ -32,6 +33,9 @@ function commonServicesImpl($location, $timeout, $http) {
   };
   this.goToGame = function() {
     $location.path('/jeu');
+  };
+  this.goToGameDev = function() {
+    $location.path('/jeu-dev');
   };
   this.goToWin = function() {
     $location.path('/win');

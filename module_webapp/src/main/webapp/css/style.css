@@ -34,6 +34,7 @@
     height: 30px;
 }
 
+
 .rogertitle h1 {
     color: #009530;
     font-size: 20px;
@@ -42,6 +43,11 @@
     cursor: pointer;
 }
 
+.rogersubtitle {
+	float: right;
+    color: #009530;
+    padding: 4px;	
+}
 
 
 .rogermenu {

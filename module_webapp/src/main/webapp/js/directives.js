@@ -6,18 +6,25 @@ rogerDirectives.directive('appfooter', function() {
   return {
     templateUrl: 'partials/widgets/footer.html'
   };
-})
+});
 
 rogerDirectives.directive('apphead', function() {
   return {
     templateUrl: 'partials/widgets/head.html'
   };
-})
+});
+
 rogerDirectives.directive('buttonbar', function() {
   return {
     templateUrl: 'partials/widgets/buttonbar.html'
   };
-})
+});
+
+rogerDirectives.directive('gamebuttonbar', function() {
+  return {
+    templateUrl: 'partials/widgets/gamebuttonbar.html'
+  };
+});
 
 
 rogerDirectives.directive('loading', ['$http', function ($http) {
