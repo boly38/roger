@@ -14,6 +14,94 @@ function dashboardController($scope, $http, commonService) {
     $scope.playdev = function() {
     	commonService.goToGameDev();
     };
+    $scope.resources = function() {
+    	commonService.goToGameRes();
+    };
+    
+};
+
+
+
+/**
+ * image map : http://jsfiddle.net/bL5rgstg/
+ * canvas    : http://jsfiddle.net/ArtBIT/kneDX/
+ * img coord : http://stackoverflow.com/questions/2159044/getting-the-x-y-coordinates-of-a-mouse-click-on-an-image-with-jquery
+ * @param $scope
+ * @param $http
+ * @param commonService
+ */
+function gameController($scope, $http, commonService) {
+    commonService.commonControler($scope);
+    $scope.controlerName = "GameCtrl";
+    commonService.info("GameCtrl");
+    $scope.ic = [];
+    $scope.maxImage = 2;
+    $scope.imageNumber = 1;
+    
+    $scope.dashboard = function() {
+    	commonService.goToDashboard();
+    };
+    
+    $scope.loadImage = function(imageNumber) {
+        $http.get('/data/' + imageNumber + '/game.json').then(function(success){
+            $scope.game = success.data;
+            // http://stackoverflow.com/questions/19310215/angularjs-image-src-change-when-model-changes
+            $scope.gameimage="/data/" + imageNumber + "/" + success.data.image;
+            $scope.gamealt = success.data.alt;
+            $scope.gamecomponents = success.data.components
+            commonService.info('load ' + success.data.alt + ' img:' + success.data.image + ' components count:' + $scope.gamecomponents.length);
+        }, function(error){
+        	commonService.info('No game.');
+        });
+    }
+    
+    $scope.loadImage($scope.imageNumber);
+
+    
+    $scope.clickElem = function($event, compId) {
+    	$event.preventDefault();
+    	if ($scope.ic[compId]) {
+    		return;
+    	}
+    	console.info(compId+" = true");
+    	$scope.ic[compId] = true;
+        $scope.checkWin();
+    };
+    
+    $scope.checkWin = function() {
+    	var count = $scope.gamecomponents.length;
+    	for (var i = 0 ; i<count; i++) {
+    		if (!$scope.ic[$scope.gamecomponents[i].id]) {
+    			return;
+    		}
+    	}
+    	$scope.imageNumber++;
+    	if ($scope.imageNumber <= $scope.maxImage) {
+    		$scope.loadImage($scope.imageNumber);
+    		return;
+    	}
+		console.info("goToWin in 2 sec");
+		$scope.icgagne = true;
+	    setTimeout($scope.winNow, 2000);
+    };
+
+    $scope.winNow = function() {
+    	console.info("winNow()");
+    	commonService.goToWin();
+    	$scope.$apply();
+    };
+    
+    
+};
+
+function winController($scope, $http, commonService) {
+    commonService.commonControler($scope);
+    $scope.controlerName = "WinCtrl";
+    commonService.info("WinCtrl");
+    $scope.win = true;
+    $scope.play = function() {
+    	commonService.goToDashboard();
+   };
 };
 
 
@@ -29,89 +117,15 @@ function GameImageManager($scope, $parentId) {
 	
 };
 
-/**
- * image map : http://jsfiddle.net/bL5rgstg/
- * canvas    : http://jsfiddle.net/ArtBIT/kneDX/
- * img coord : http://stackoverflow.com/questions/2159044/getting-the-x-y-coordinates-of-a-mouse-click-on-an-image-with-jquery
- * @param $scope
- * @param $http
- * @param commonService
- */
-function gameController($scope, $http, commonService) {
-    commonService.commonControler($scope);
-    $scope.controlerName = "GameCtrl";
-    commonService.info("GameCtrl");
-    
-    $scope.dashboard = function() {
-    	commonService.goToDashboard();
-    };
-    
-    $scope.imgManager = new GameImageManager($scope, "gamegreen");
-    $scope.imgManager.init();
-    
-    $(".yellow").on("click", function(e){
-        e.preventDefault();
-        alert('yellow');
-    });
-    $(".red").on("click", function(e){
-        e.preventDefault();
-        alert('red');
-    });
-    $scope.miroir = function($event) {
-    	$event.preventDefault();
-    	if ($scope.icmiroir) {
-    		return;
-    	}
-    	console.info("miroir = true");
-        $scope.icmiroir = true;
-        $scope.checkWin();
-    };
-    $scope.landau = function($event) {
-    	$event.preventDefault();
-    	if ($scope.iclandau) {
-    		return;
-    	}
-    	console.info("landau = true");
-        $scope.iclandau = true;
-        $scope.checkWin();
-    };
-    $scope.checkWin = function() {
-    	if ($scope.icmiroir && $scope.iclandau) {
-    		console.info("goToWin in 2 sec");
-    		$scope.icgagne = true;
-	    	setTimeout($scope.winNow, 2000);
-    	}
-    };
-    $scope.winNow = function() {
-    	console.info("winNow()");
-    	commonService.goToWin();
-    	$scope.$apply();
-    }
-    $(".allImg").on("click", function(e){
-        e.preventDefault();
-        var offset = $(this).offset();
-        var xClick = e.pageX - offset.left;
-        var yClick = e.pageY - offset.top;
-        alert('allImg x:'+ xClick + ' y:'+ yClick);
-    });
-    
-    
-};
-
-function winController($scope, $http, commonService) {
-    commonService.commonControler($scope);
-    $scope.controlerName = "WinCtrl";
-    commonService.info("WinCtrl");
-    $scope.win = true;
-    $scope.play = function() {
-    	commonService.goToDashboard();
-   };
-};
-
 function gameDevController($scope, $http, commonService) {
     commonService.commonControler($scope);
     $scope.controlerName = "GameDevCtrl";
     commonService.info("GameDevCtrl");
+    $scope.imgManager = new GameImageManager($scope, "gamegreen");
+    $scope.imgManager.init();
+    
+
+    $scope.ic = [];
     
     $scope.dashboard = function() {
     	commonService.goToDashboard();
@@ -119,12 +133,49 @@ function gameDevController($scope, $http, commonService) {
     
     $http.get('/data/1/game.json').then(function(success){
         $scope.game = success.data;
-        commonService.info('load ' + success.data.alt + ' img:' + success.data.image);
         // http://stackoverflow.com/questions/19310215/angularjs-image-src-change-when-model-changes
         $scope.gameimage="/data/1/" + success.data.image;
         $scope.gamealt = success.data.alt;
+        $scope.gamecomponents = success.data.components
+        commonService.info('load ' + success.data.alt + ' img:' + success.data.image + ' components count:' + $scope.gamecomponents.length);
     }, function(error){
     	commonService.info('No game.');
+    });
+    
+    $scope.clickElem = function($event, compId) {
+    	$event.preventDefault();
+    	if ($scope.ic[compId]) {
+    		return;
+    	}
+    	console.info(compId+" = true");
+    	$scope.ic[compId] = true;
+        $scope.checkWin();
+    };
+    
+    $scope.checkWin = function() {
+    	var count = $scope.gamecomponents.length;
+    	for (var i = 0 ; i<count; i++) {
+    		if (!$scope.ic[$scope.gamecomponents[i].id]) {
+    			return;
+    		}
+    	}
+		console.info("goToWin in 2 sec");
+		$scope.icgagne = true;
+	    setTimeout($scope.winNow, 2000);
+    };
+
+    $scope.winNow = function() {
+    	console.info("winNow()");
+    	commonService.goToWin();
+    	$scope.$apply();
+    };
+    
+    $("#imggame").on("click", function(e){
+        e.preventDefault();
+        var offset = $(this).offset();
+        var xClick = e.pageX - offset.left;
+        var yClick = e.pageY - offset.top;
+        alert('allImg x:'+ xClick + ' y:'+ yClick);
     });
 };
 

@@ -24,6 +24,10 @@ rogerApp.config(
           controller:  'GameDevCtrl as ctrl',
           templateUrl: 'partials/game-dev.html'
     })
+    .when('/jeu-resources',{
+          controller:  'WinCtrl as ctrl',
+          templateUrl: 'partials/resources.html'
+    })
     .when('/win',{
         controller:  'WinCtrl as ctrl',
         templateUrl: 'partials/win.html'
