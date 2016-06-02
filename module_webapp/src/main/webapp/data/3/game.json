@@ -1,18 +1,18 @@
 {
  "image":"dining-room.jpg",
  "alt":"dining-room",
- "width":"700",
+ "width":"500",
  "components":[
    {"id":"icchaise",
  	"name":"chaise",
  	"left":"200px",
- 	"top":"500px",
+ 	"top":"300px",
  	"shape":"poly",
  	"coord":"128,229,157,279,191,286,194,338,143,357,144,352,132,361,120,343,107,347,105,331,98,224"},
    {"id":"icfauteuil",
  	"name":"fauteuil",
  	"left":"100px",
- 	"top":"400px",
+ 	"top":"200px",
  	"shape":"poly",
  	"coord":"105,291,106,238,97,230,88,229,60,197,39,199,21,204,6,229,2,236,4,264,31,275,32,295"}
  ]
