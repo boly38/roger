@@ -4,7 +4,7 @@
  "width":"700",
  "components":[
    {"id":"iccadres",
- 	"name":"cadres",
+ 	"name":"3 petits cadres",
  	"left":"600px",
  	"top":"250px",
  	"shape":"poly",

@@ -35,7 +35,7 @@ function gameController($scope, $http, commonService) {
     $scope.controlerName = "GameCtrl";
     commonService.info("GameCtrl");
     $scope.ic = [];
-    $scope.maxImage = 2;
+    $scope.maxImage = 3;
     $scope.imageNumber = 1;
     
     $scope.dashboard = function() {
