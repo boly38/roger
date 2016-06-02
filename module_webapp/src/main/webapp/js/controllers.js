@@ -56,7 +56,7 @@ function gameController($scope, $http, commonService) {
     }
     
 	$scope.loadLevel = function() {
-		this.loadImage(this.imageNumber);
+		$scope.loadImage($scope.imageNumber);
 	};
     
     $scope.clickElem = function($event, compId) {
