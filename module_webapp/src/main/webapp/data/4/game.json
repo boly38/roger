@@ -1,0 +1,26 @@
+{
+ "image":"living-room.jpg",
+ "alt":"living-room",
+ "width":"700",
+ "components":[
+   {"id":"icbougie",
+ 	"name":"la bougie",
+ 	"left":"590px",
+ 	"top":"560px",
+ 	"shape":"poly",
+ 	"coord":"588,571,584,564,590,560,595,547,601,545,608,551,605,563,614,568,607,573"},
+   {"id":"icradiateur",
+ 	"name":"le radiateur",
+ 	"left":"260px",
+ 	"top":"550px",
+ 	"shape":"poly",
+ 	"coord":"245,507,247,592,356,594,364,569,362,542,371,538,374,510"},
+   {"id":"iccoussin",
+ 	"name":"le coussin",
+ 	"left":"630px",
+ 	"top":"617px",
+ 	"shape":"poly",
+ 	"coord":"619,641,632,587,660,545,676,557,698,568,699,612,674,679,645,675"}
+	
+ ]
+}

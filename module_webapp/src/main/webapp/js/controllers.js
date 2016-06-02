@@ -35,7 +35,7 @@ function gameController($scope, $http, commonService) {
     $scope.controlerName = "GameCtrl";
     commonService.info("GameCtrl");
     $scope.ic = [];
-    $scope.maxImage = 3;
+    $scope.maxImage = 4;
     $scope.imageNumber = 1;
     
     $scope.dashboard = function() {
@@ -55,8 +55,9 @@ function gameController($scope, $http, commonService) {
         });
     }
     
-    $scope.loadImage($scope.imageNumber);
-
+	$scope.loadLevel = function() {
+		this.loadImage(this.imageNumber);
+	};
     
     $scope.clickElem = function($event, compId) {
     	$event.preventDefault();
@@ -76,12 +77,12 @@ function gameController($scope, $http, commonService) {
     		}
     	}
     	$scope.imageNumber++;
+		$scope.icgagne = true;
     	if ($scope.imageNumber <= $scope.maxImage) {
-    		$scope.loadImage($scope.imageNumber);
+			setTimeout($scope.loadLevel, 2000);
     		return;
     	}
 		console.info("goToWin in 2 sec");
-		$scope.icgagne = true;
 	    setTimeout($scope.winNow, 2000);
     };
 
@@ -91,6 +92,7 @@ function gameController($scope, $http, commonService) {
     	$scope.$apply();
     };
     
+	$scope.loadLevel();
     
 };
 
