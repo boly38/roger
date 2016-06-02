@@ -12,11 +12,11 @@
    	</div>
     
     <div class="gamegreen" >
-    	<div class="imgcomponent divgagne" ng-show="icgagne">GAGN&Eacute; !</div>
        	<div ng-repeat="cdiv in gamecomponents" 
        		 class="imgcomponent"
        		 ng-show="ic[cdiv.id]"
        	 	style="left: {{cdiv.left}}; top: {{cdiv.top}};">{{cdiv.name}}</div>
+    	<div class="imgcomponent divgagne" ng-show="icgagne">GAGN&Eacute; !</div>
     	<img id="imggame" 
 			 ng-src="{{gameimage}}"
 			 alt="{{gamealt}}"
