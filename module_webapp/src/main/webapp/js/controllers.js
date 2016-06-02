@@ -35,6 +35,7 @@ function gameController($scope, $http, commonService) {
     $scope.controlerName = "GameCtrl";
     commonService.info("GameCtrl");
     $scope.ic = [];
+	$scope.icgagne = false;
     $scope.maxImage = 4;
     $scope.imageNumber = 1;
     

@@ -228,7 +228,7 @@ area {
 }
 .gamegreen {
 	top: 20px;
-	border: 1px solid green;
+	/* border: 1px solid green; */
 	min-height: 400px;
 }
 #imggame{
@@ -250,4 +250,11 @@ area {
 	margin-bottom: -20px; /* src: http://stackoverflow.com/questions/18339549/floating-div-over-an-image */
 	padding-left: 5px;
 	padding-right: 5px;
+}
+
+.icgagne {
+	left: 250px;
+	top: 50px;
+	font-size: 25px;
+	font-weight: bold;
 }
