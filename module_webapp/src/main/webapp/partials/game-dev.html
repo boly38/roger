@@ -2,10 +2,6 @@
     <div class="apphead" apphead></div>
     <div gamebuttonbar></div>
 
-	<hr>
-	VERSION DEV
-	<hr>
-
    	<div>
     	<p>
     	Tu dois retrouver :
@@ -14,12 +10,13 @@
     		</ul>
     	</p>
    	</div>
+    
     <div class="gamegreen" >
-    	<div class="imgcomponent" ng-show="icgagne" style="left: 250px; top: 50px;">GAGN&Eacute; !</div>
        	<div ng-repeat="cdiv in gamecomponents" 
        		 class="imgcomponent"
        		 ng-show="ic[cdiv.id]"
        	 	style="left: {{cdiv.left}}; top: {{cdiv.top}};">{{cdiv.name}}</div>
+    	<div class="imgcomponent divgagne" ng-show="icgagne">GAGN&Eacute; !</div>
     	<img id="imggame" 
 			 ng-src="{{gameimage}}"
 			 alt="{{gamealt}}"
@@ -31,16 +28,17 @@
 	  	    	  ng-click="clickElem($event, comp.id)"
 	  	    	  shape="{{comp.shape}}"
 	  	    	  coords="{{comp.coord}}"
-	  	    	  href=""/>
-		    <area class="allImg" shape="rect"   coords="0,0,700,700" href="" />
+	  	    	  href=""/>	  		
 		</map>
     </div>
 
-	<div>
+   	<div>
     	<p>
     	<center><i>Avec la souris, clique sur l'image sur les objets que Roger doit retrouver.</i></center>
     	</p>
+    	<p>x: {{clickimgx}} y: {{clickimgy}}</p>
+    	<p>score: {{gamescore}}
    	</div>
-	
+   	
 	<div appfooter></div>
 </div>

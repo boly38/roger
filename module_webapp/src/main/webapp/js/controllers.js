@@ -3,10 +3,11 @@
 var rogerControllers = angular.module('rogerControllers', []);
 
 
-function dashboardController($scope, $http, commonService) {
+function dashboardController($scope, $http, Analytics, commonService) {
     commonService.commonControler($scope);
     $scope.controlerName = "DashboardCtrl";
     commonService.info("DashboardCtrl");
+    Analytics.trackPage("/Dashboard",'Dashboard', {});
     
     $scope.play = function() {
     	commonService.goToGame();
@@ -30,7 +31,7 @@ function dashboardController($scope, $http, commonService) {
  * @param $http
  * @param commonService
  */
-function gameController($scope, $http, commonService) {
+function gameController($scope, $http, Analytics, commonService) {
     commonService.commonControler($scope);
     $scope.controlerName = "GameCtrl";
     commonService.info("GameCtrl");
@@ -42,6 +43,7 @@ function gameController($scope, $http, commonService) {
     };
     
     $scope.loadImage = function(imageNumber) {
+        Analytics.trackPage("/Game/" + imageNumber,'Game '  + imageNumber, {});
         $http.get('/data/' + imageNumber + '/game.json').then(function(success){
             $scope.game = success.data;
             // http://stackoverflow.com/questions/19310215/angularjs-image-src-change-when-model-changes
@@ -97,10 +99,11 @@ function gameController($scope, $http, commonService) {
     
 };
 
-function winController($scope, $http, commonService) {
+function winController($scope, $http, Analytics, commonService) {
     commonService.commonControler($scope);
     $scope.controlerName = "WinCtrl";
     commonService.info("WinCtrl");
+    Analytics.trackPage("/Win",'Win', {});
     $scope.win = true;
     $scope.play = function() {
     	commonService.goToDashboard();
@@ -108,69 +111,100 @@ function winController($scope, $http, commonService) {
 };
 
 
-function GameImageManager($scope, $parentId) {
+function GameManager($scope, $http, Analytics, commonService) {
 	this.scope = $scope;
-	this.parentId = $parentId;
-	this.width = 300;
-	this.height = 300;
+	$scope.gameManager = this;
+    $scope.maxImage = 4;
+    $scope.imageNumber = 1;
 	
-	this.init = function() {
-		this.container = document.getElementById($parentId);
+	this.startGame = function() {
+		$scope.gamescore = 0;
+		this.loadLevel();
 	};
-	
-};
 
-function gameDevController($scope, $http, commonService) {
-    commonService.commonControler($scope);
-    $scope.controlerName = "GameDevCtrl";
-    commonService.info("GameDevCtrl");
-    $scope.imgManager = new GameImageManager($scope, "gamegreen");
-    $scope.imgManager.init();
+	this.loadImage = function(imageNumber) {
+    	Analytics.trackPage("/GameDev/" + imageNumber,'Game-dev '  + imageNumber, {});
+        $http.get('/data/' + imageNumber + '/game.json').then(function(success){
+            $scope.game = success.data;
+            // http://stackoverflow.com/questions/19310215/angularjs-image-src-change-when-model-changes
+            $scope.gameimage="/data/" + imageNumber + "/" + success.data.image;
+            $scope.gamealt = success.data.alt;
+            $scope.gamecomponents = success.data.components;
+            $scope.gamepoints = success.data.points;
+            if (!$scope.gamepoints) {
+            	$scope.gamepoints = 404;
+            }
+            commonService.info('load ' + success.data.alt + ' img:' + success.data.image + ' components count:' + $scope.gamecomponents.length);
+        }, function(error){
+        	commonService.info('No game.');
+        });
+    }
     
-
-    $scope.ic = [];
+	this.loadLevel = function() {
+		$scope.ic = [];
+		$scope.icgagne = false;
+		$scope.gameManager.loadImage($scope.imageNumber);
+		var d = new Date();
+		$scope.starttime = d.getTime(); 
+	};
     
-    $scope.dashboard = function() {
-    	commonService.goToDashboard();
-    };
-    
-    $http.get('/data/1/game.json').then(function(success){
-        $scope.game = success.data;
-        // http://stackoverflow.com/questions/19310215/angularjs-image-src-change-when-model-changes
-        $scope.gameimage="/data/1/" + success.data.image;
-        $scope.gamealt = success.data.alt;
-        $scope.gamecomponents = success.data.components
-        commonService.info('load ' + success.data.alt + ' img:' + success.data.image + ' components count:' + $scope.gamecomponents.length);
-    }, function(error){
-    	commonService.info('No game.');
-    });
-    
-    $scope.clickElem = function($event, compId) {
+    this.clickElem = function($event, compId) {
     	$event.preventDefault();
     	if ($scope.ic[compId]) {
     		return;
     	}
     	console.info(compId+" = true");
     	$scope.ic[compId] = true;
-        $scope.checkWin();
+    	$scope.gameManager.checkWin();
     };
-    
-    $scope.checkWin = function() {
+	
+    this.checkWin = function() {
     	var count = $scope.gamecomponents.length;
     	for (var i = 0 ; i<count; i++) {
     		if (!$scope.ic[$scope.gamecomponents[i].id]) {
     			return;
     		}
     	}
-		console.info("goToWin in 2 sec");
+    	var d = new Date();
+		var duration = d.getTime() - $scope.starttime ;
+		console.info("game duration (ms)" + duration);
+		var successRatio = 0;
+		if (duration < 120000) {
+			successRatio = 1 - (duration / 120000); 
+		}
+		$scope.gamescore += Math.round($scope.gamepoints * successRatio);
+		
+    	$scope.imageNumber++;
 		$scope.icgagne = true;
-	    setTimeout($scope.winNow, 2000);
+    	if ($scope.imageNumber <= $scope.maxImage) {
+			setTimeout($scope.gameManager.loadLevel, 2000);
+    		return;
+    	}
+		console.info("goToWin in 2 sec");
+	    setTimeout($scope.gameManager.winNow, 2000);
     };
 
-    $scope.winNow = function() {
+    this.winNow = function() {
     	console.info("winNow()");
     	commonService.goToWin();
     	$scope.$apply();
+    };
+    
+	
+};
+
+function gameDevController($scope, $http, Analytics, commonService) {
+    commonService.commonControler($scope);
+    $scope.controlerName = "GameDevCtrl";
+    commonService.info("GameDevCtrl");
+    $scope.devMode = "(DEV MODE)";
+    var gameManager = new GameManager($scope, $http, Analytics, commonService);
+    gameManager.startGame();
+    
+    $scope.clickElem = gameManager.clickElem;
+    
+    $scope.dashboard = function() {
+    	commonService.goToDashboard();
     };
     
     $("#imggame").on("click", function(e){
@@ -178,7 +212,10 @@ function gameDevController($scope, $http, commonService) {
         var offset = $(this).offset();
         var xClick = e.pageX - offset.left;
         var yClick = e.pageY - offset.top;
-        alert('allImg x:'+ xClick + ' y:'+ yClick);
+        $scope.clickimgx = xClick;
+        $scope.clickimgy = yClick;
+        console.info('x:' + xClick + ' y:' + yClick);
+        $scope.$apply();
     });
 };
 

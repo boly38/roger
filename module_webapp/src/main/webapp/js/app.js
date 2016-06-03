@@ -5,11 +5,11 @@ var rogerApp = angular.module('rogerApp', [
   'ngRoute',
   'rogerControllers',
   'rogerDirectives',
-  'rogerServices'
+  'rogerServices',
+  'angular-google-analytics'
 ]);
 
-rogerApp.config(
-   function($routeProvider, $httpProvider){
+rogerApp.config(function($routeProvider, $httpProvider, AnalyticsProvider){
     console.info("configure ROGER");
     $routeProvider
     .when('/',{
@@ -35,6 +35,9 @@ rogerApp.config(
     .otherwise({ 
         template: '<h1>Not Found</h1>'
     });
+    // analytics.logAllCalls(true);
+    AnalyticsProvider.setAccount('UA-1988442-17');
+    AnalyticsProvider.setDomainName('rogerdemenage.ddns.net');
 })
 .run(function($rootScope, $window) {
 	console.info("run ROGER");

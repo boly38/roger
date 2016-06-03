@@ -36,9 +36,9 @@ body {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-route.js"></script>
  
- 	     <!-- Angular Analytics
+ 	    <!-- Angular Analytics -->
 	    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-google-analytics/1.1.5/angular-google-analytics.js"></script>
-	     -->
+
 
         <!-- VPU resources -->
         <link rel="stylesheet" href="../css/style.css" />
