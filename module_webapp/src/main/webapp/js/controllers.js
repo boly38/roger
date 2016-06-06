@@ -21,97 +21,7 @@ function dashboardController($scope, $http, Analytics, commonService) {
     
 };
 
-
-
-/**
- * image map : http://jsfiddle.net/bL5rgstg/
- * canvas    : http://jsfiddle.net/ArtBIT/kneDX/
- * img coord : http://stackoverflow.com/questions/2159044/getting-the-x-y-coordinates-of-a-mouse-click-on-an-image-with-jquery
- * @param $scope
- * @param $http
- * @param commonService
- */
-function gameController($scope, $http, Analytics, commonService) {
-    commonService.commonControler($scope);
-    $scope.controlerName = "GameCtrl";
-    commonService.info("GameCtrl");
-    $scope.maxImage = 4;
-    $scope.imageNumber = 1;
-    
-    $scope.dashboard = function() {
-    	commonService.goToDashboard();
-    };
-    
-    $scope.loadImage = function(imageNumber) {
-        Analytics.trackPage("/Game/" + imageNumber,'Game '  + imageNumber, {});
-        $http.get('/data/' + imageNumber + '/game.json').then(function(success){
-            $scope.game = success.data;
-            // http://stackoverflow.com/questions/19310215/angularjs-image-src-change-when-model-changes
-            $scope.gameimage="/data/" + imageNumber + "/" + success.data.image;
-            $scope.gamealt = success.data.alt;
-            $scope.gamecomponents = success.data.components
-            commonService.info('load ' + success.data.alt + ' img:' + success.data.image + ' components count:' + $scope.gamecomponents.length);
-        }, function(error){
-        	commonService.info('No game.');
-        });
-    }
-    
-	$scope.loadLevel = function() {
-		$scope.ic = [];
-		$scope.icgagne = false;
-		$scope.loadImage($scope.imageNumber);
-	};
-    
-    $scope.clickElem = function($event, compId) {
-    	$event.preventDefault();
-    	if ($scope.ic[compId]) {
-    		return;
-    	}
-    	console.info(compId+" = true");
-    	$scope.ic[compId] = true;
-        $scope.checkWin();
-    };
-    
-    $scope.checkWin = function() {
-    	var count = $scope.gamecomponents.length;
-    	for (var i = 0 ; i<count; i++) {
-    		if (!$scope.ic[$scope.gamecomponents[i].id]) {
-    			return;
-    		}
-    	}
-    	$scope.imageNumber++;
-		$scope.icgagne = true;
-    	if ($scope.imageNumber <= $scope.maxImage) {
-			setTimeout($scope.loadLevel, 2000);
-    		return;
-    	}
-		console.info("goToWin in 2 sec");
-	    setTimeout($scope.winNow, 2000);
-    };
-
-    $scope.winNow = function() {
-    	console.info("winNow()");
-    	commonService.goToWin();
-    	$scope.$apply();
-    };
-    
-	$scope.loadLevel();
-    
-};
-
-function winController($scope, $http, Analytics, commonService) {
-    commonService.commonControler($scope);
-    $scope.controlerName = "WinCtrl";
-    commonService.info("WinCtrl");
-    Analytics.trackPage("/Win",'Win', {});
-    $scope.win = true;
-    $scope.play = function() {
-    	commonService.goToDashboard();
-   };
-};
-
-
-function GameManager($scope, $http, Analytics, commonService) {
+function GameManager($scope, $http, store, Analytics, commonService) {
 	this.scope = $scope;
 	$scope.gameManager = this;
     $scope.maxImage = 4;
@@ -119,6 +29,8 @@ function GameManager($scope, $http, Analytics, commonService) {
 	
 	this.startGame = function() {
 		$scope.gamescore = 0;
+		$scope.levelscore = 0;
+		store.set('gamescore', $scope.gamescore);
 		this.loadLevel();
 	};
 
@@ -172,7 +84,9 @@ function GameManager($scope, $http, Analytics, commonService) {
 		if (duration < 120000) {
 			successRatio = 1 - (duration / 120000); 
 		}
-		$scope.gamescore += Math.round($scope.gamepoints * successRatio);
+		$scope.levelscore = Math.round($scope.gamepoints * successRatio);
+		$scope.gamescore += $scope.levelscore; 
+		store.set('gamescore', $scope.gamescore);
 		
     	$scope.imageNumber++;
 		$scope.icgagne = true;
@@ -193,12 +107,52 @@ function GameManager($scope, $http, Analytics, commonService) {
 	
 };
 
-function gameDevController($scope, $http, Analytics, commonService) {
+/**
+ * image map : http://jsfiddle.net/bL5rgstg/
+ * canvas    : http://jsfiddle.net/ArtBIT/kneDX/
+ * img coord : http://stackoverflow.com/questions/2159044/getting-the-x-y-coordinates-of-a-mouse-click-on-an-image-with-jquery
+ * @param $scope
+ * @param $http
+ * @param commonService
+ */
+function gameController($scope, $http, store, Analytics, commonService) {
+    commonService.commonControler($scope);
+    $scope.controlerName = "GameCtrl";
+    commonService.info("GameCtrl");
+    $scope.maxImage = 4;
+    $scope.imageNumber = 1;
+    
+    $scope.dashboard = function() {
+    	commonService.goToDashboard();
+    };
+    
+    var gameManager = new GameManager($scope, $http, store, Analytics, commonService);
+    gameManager.startGame();
+    
+    $scope.clickElem = gameManager.clickElem;
+};
+
+function winController($scope, $http, store, Analytics, commonService) {
+    commonService.commonControler($scope);
+    $scope.controlerName = "WinCtrl";
+    commonService.info("WinCtrl");
+    $scope.gamescore = store.get('gamescore');
+    Analytics.trackPage("/Win",'Win', {"gamescore":$scope.gamescore});
+    $scope.win = true;
+    $scope.play = function() {
+    	commonService.goToDashboard();
+   };
+};
+
+
+
+
+function gameDevController($scope, $http, store, store, Analytics, commonService) {
     commonService.commonControler($scope);
     $scope.controlerName = "GameDevCtrl";
     commonService.info("GameDevCtrl");
     $scope.devMode = "(DEV MODE)";
-    var gameManager = new GameManager($scope, $http, Analytics, commonService);
+    var gameManager = new GameManager($scope, $http, store, Analytics, commonService);
     gameManager.startGame();
     
     $scope.clickElem = gameManager.clickElem;

@@ -6,6 +6,7 @@ var rogerApp = angular.module('rogerApp', [
   'rogerControllers',
   'rogerDirectives',
   'rogerServices',
+  'angular-storage',
   'angular-google-analytics'
 ]);
 
@@ -35,6 +36,18 @@ rogerApp.config(function($routeProvider, $httpProvider, AnalyticsProvider){
     .otherwise({ 
         template: '<h1>Not Found</h1>'
     });
+    // http://stackoverflow.com/questions/16098430/angular-ie-caching-issue-for-http
+    console.info("configure no cache for httpProvider")
+    //initialize get if not there
+    if (!$httpProvider.defaults.headers.get) {
+        $httpProvider.defaults.headers.get = {};    
+    }    
+    //disable IE ajax request caching
+    $httpProvider.defaults.headers.get['If-Modified-Since'] = 'Mon, 26 Jul 1997 05:00:00 GMT';
+    // extra
+    $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
+    $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
+
     // analytics.logAllCalls(true);
     AnalyticsProvider.setAccount('UA-1988442-17');
     AnalyticsProvider.setDomainName('rogerdemenage.ddns.net');

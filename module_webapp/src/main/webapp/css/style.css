@@ -255,6 +255,13 @@ area {
 .divgagne {
 	left: 250px;
 	top: 50px;
-	font-size: 25px;
+	float: left;
+	position: relative;
+	color: red;
+	background-color: yellow;
+	z-index: 10; 
+	margin-bottom: -20px; /* src: http://stackoverflow.com/questions/18339549/floating-div-over-an-image */
+	padding-left: 5px;
+	padding-right: 5px;
 	font-weight: bold;
 }

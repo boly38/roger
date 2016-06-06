@@ -35,7 +35,10 @@ body {
         <!-- angularJS CDN -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-route.js"></script>
- 
+
+        <!-- angularJS storage CDN -->
+	    <script type="text/javascript" src="https://cdn.rawgit.com/auth0/angular-storage/master/dist/angular-storage.js"></script>
+     
  	    <!-- Angular Analytics -->
 	    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-google-analytics/1.1.5/angular-google-analytics.js"></script>
 
