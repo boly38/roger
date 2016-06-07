@@ -2,6 +2,7 @@
  "image":"mexican-style.jpg",
  "alt":"mexican-style",
  "width":"700",
+ "point":"30",
  "components":[
    {"id":"iccadres",
  	"name":"3 petits cadres",

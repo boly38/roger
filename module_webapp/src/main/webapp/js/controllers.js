@@ -24,7 +24,7 @@ function dashboardController($scope, $http, Analytics, commonService) {
 function GameManager($scope, $http, store, Analytics, commonService) {
 	this.scope = $scope;
 	$scope.gameManager = this;
-    $scope.maxImage = 4;
+    $scope.maxImage = 5;
     $scope.imageNumber = 1;
 	
 	this.startGame = function() {
@@ -42,7 +42,7 @@ function GameManager($scope, $http, store, Analytics, commonService) {
             $scope.gameimage="/data/" + imageNumber + "/" + success.data.image;
             $scope.gamealt = success.data.alt;
             $scope.gamecomponents = success.data.components;
-            $scope.gamepoints = success.data.points;
+            $scope.gamepoints = success.data.point;
             if (!$scope.gamepoints) {
             	$scope.gamepoints = 404;
             }

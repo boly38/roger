@@ -2,7 +2,7 @@
  "image":"old-room-1530324.jpg",
  "alt":"room",
  "width":"700",
- "point":"200",
+ "point":"20",
  "components":[
    {"id":"icmiroir",
  	"name":"miroir",
