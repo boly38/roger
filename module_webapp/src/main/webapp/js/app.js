@@ -33,6 +33,10 @@ rogerApp.config(function($routeProvider, $httpProvider, AnalyticsProvider){
         controller:  'WinCtrl as ctrl',
         templateUrl: 'partials/win.html'
     })
+    .when('/failed',{
+        controller:  'FailedCtrl as ctrl',
+        templateUrl: 'partials/failed.html'
+    })
     .otherwise({ 
         template: '<h1>Not Found</h1>'
     });

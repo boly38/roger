@@ -2,15 +2,10 @@
     <div class="apphead" apphead></div>
     <div gamebuttonbar></div>
 
-   	<div>
-    	<p>
-    	Tu dois retrouver :
-    		<span id="componentlist" ng-repeat="comp in gamecomponents">
-    			<span>&#160;{{comp.name}}</span>
-    		</span>
-    	</p>
-   	</div>
-    
+	<div class="componentlist">
+		<i>Tu dois retrouver :</i> <div class="componentlistitem" ng-class="{componentfound: ic[comp.id]}" ng-repeat="comp in gamecomponents">&#160;{{comp.name}}</div>
+	</div>
+    <div style="clear: both;"/>
     <div class="gamegreen" >
        	<div ng-repeat="cdiv in gamecomponents" 
        		 class="imgcomponent"

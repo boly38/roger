@@ -21,20 +21,50 @@ function dashboardController($scope, $http, Analytics, commonService) {
     
 };
 
-function GameManager($scope, $http, store, Analytics, commonService) {
+function GameManager($scope, $http, store, Analytics, commonService, $timeout) {
 	this.scope = $scope;
 	$scope.gameManager = this;
     $scope.maxImage = 5;
-    $scope.imageNumber = 1;
+    $scope.imageNumber = 0;
 	
 	this.startGame = function() {
 		$scope.gamescore = 0;
 		$scope.levelscore = 0;
+		$scope.badclick = 0;
 		store.set('gamescore', $scope.gamescore);
+	    $scope.images = [1,2,3,4,5];
 		this.loadLevel();
 	};
 
-	this.loadImage = function(imageNumber) {
+	/**
+	 * we pick randomly an image in the images array and remove it
+	 */
+    this.getNextImageNumber = function() {
+    	var desiredIndex = Math.floor(Math.random() * $scope.images.length);
+    	return $scope.images.splice(desiredIndex, 1)[0];
+    };
+
+    /**
+     * does the image array still have image ?
+     */
+    this.hasNextLevel = function() {
+    	return $scope.images && $scope.images.length > 0;;
+    };
+
+    /**
+     * load a new level
+     */
+	this.loadLevel = function() {
+		$scope.ic = [];
+		$scope.icgagne = false;
+    	var imgNumber = $scope.gameManager.getNextImageNumber();
+		$scope.gameManager.loadLevelData(imgNumber);
+	};
+
+    /**
+     * load a new level data
+     */
+	this.loadLevelData = function(imageNumber) {
     	Analytics.trackPage("/GameDev/" + imageNumber,'Game-dev '  + imageNumber, {});
         $http.get('/data/' + imageNumber + '/game.json').then(function(success){
             $scope.game = success.data;
@@ -47,18 +77,14 @@ function GameManager($scope, $http, store, Analytics, commonService) {
             	$scope.gamepoints = 404;
             }
             commonService.info('load ' + success.data.alt + ' img:' + success.data.image + ' components count:' + $scope.gamecomponents.length);
+    		var d = new Date();
+    		$scope.starttime = d.getTime();
+    		$scope.gameManager.updateLevelScore();
         }, function(error){
         	commonService.info('No game.');
         });
     }
     
-	this.loadLevel = function() {
-		$scope.ic = [];
-		$scope.icgagne = false;
-		$scope.gameManager.loadImage($scope.imageNumber);
-		var d = new Date();
-		$scope.starttime = d.getTime(); 
-	};
     
     this.clickElem = function($event, compId) {
     	$event.preventDefault();
@@ -69,31 +95,51 @@ function GameManager($scope, $http, store, Analytics, commonService) {
     	$scope.ic[compId] = true;
     	$scope.gameManager.checkWin();
     };
+    
+    this.updateLevelScore = function() {
+		// calculate time taken
+		var d = new Date();
+		var duration = d.getTime() - $scope.starttime ;
+		// calculate game points
+		var successRatio = 0;
+		var MAX_LEVEL_TIME = 120000;
+		if (duration < MAX_LEVEL_TIME) {
+			successRatio = 1 - (duration / MAX_LEVEL_TIME); 
+		}
+		console.info("levelscore:" + $scope.levelscore + "points, level duration:" + duration + " ms, successRatio: " + successRatio);
+		$scope.levelscore = Math.round($scope.gamepoints * successRatio);
+		if ($scope.levelscore <= 0) {
+			commonService.goToFailed();
+			return;
+		}
+		if (!$scope.icgagne) {
+			$timeout($scope.gameManager.updateLevelScore, 2000);
+		}
+    };
 	
     this.checkWin = function() {
+    	// do we have found all level element ?
     	var count = $scope.gamecomponents.length;
     	for (var i = 0 ; i<count; i++) {
     		if (!$scope.ic[$scope.gamecomponents[i].id]) {
     			return;
     		}
     	}
-    	var d = new Date();
-		var duration = d.getTime() - $scope.starttime ;
-		console.info("game duration (ms)" + duration);
-		var successRatio = 0;
-		if (duration < 120000) {
-			successRatio = 1 - (duration / 120000); 
-		}
-		$scope.levelscore = Math.round($scope.gamepoints * successRatio);
+		$scope.icgagne = true;
+
+		$scope.gameManager.updateLevelScore();
+
+		// update game score
 		$scope.gamescore += $scope.levelscore; 
 		store.set('gamescore', $scope.gamescore);
 		
-    	$scope.imageNumber++;
-		$scope.icgagne = true;
-    	if ($scope.imageNumber <= $scope.maxImage) {
+		// go to the next level
+		if ($scope.gameManager.hasNextLevel()) {
 			setTimeout($scope.gameManager.loadLevel, 2000);
     		return;
-    	}
+		}
+		
+		// no next level: win the game!
 		console.info("goToWin in 2 sec");
 	    setTimeout($scope.gameManager.winNow, 2000);
     };
@@ -115,7 +161,7 @@ function GameManager($scope, $http, store, Analytics, commonService) {
  * @param $http
  * @param commonService
  */
-function gameController($scope, $http, store, Analytics, commonService) {
+function gameController($scope, $http, store, Analytics, commonService, $timeout) {
     commonService.commonControler($scope);
     $scope.controlerName = "GameCtrl";
     commonService.info("GameCtrl");
@@ -126,7 +172,7 @@ function gameController($scope, $http, store, Analytics, commonService) {
     	commonService.goToDashboard();
     };
     
-    var gameManager = new GameManager($scope, $http, store, Analytics, commonService);
+    var gameManager = new GameManager($scope, $http, store, Analytics, commonService, $timeout);
     gameManager.startGame();
     
     $scope.clickElem = gameManager.clickElem;
@@ -138,7 +184,20 @@ function winController($scope, $http, store, Analytics, commonService) {
     commonService.info("WinCtrl");
     $scope.gamescore = store.get('gamescore');
     Analytics.trackPage("/Win",'Win', {"gamescore":$scope.gamescore});
-    $scope.win = true;
+    $scope.gameend = true;
+    $scope.play = function() {
+    	commonService.goToDashboard();
+   };
+};
+
+
+function failedController($scope, $http, store, Analytics, commonService) {
+    commonService.commonControler($scope);
+    $scope.controlerName = "FailedCtrl";
+    commonService.info("FailedCtrl");
+    $scope.gamescore = store.get('gamescore');
+    Analytics.trackPage("/Failed",'Failed', {"gamescore":$scope.gamescore});
+    $scope.gameend = true;
     $scope.play = function() {
     	commonService.goToDashboard();
    };
@@ -147,12 +206,12 @@ function winController($scope, $http, store, Analytics, commonService) {
 
 
 
-function gameDevController($scope, $http, store, store, Analytics, commonService) {
+function gameDevController($scope, $http, store, store, Analytics, commonService, $timeout) {
     commonService.commonControler($scope);
     $scope.controlerName = "GameDevCtrl";
     commonService.info("GameDevCtrl");
     $scope.devMode = "(DEV MODE)";
-    var gameManager = new GameManager($scope, $http, store, Analytics, commonService);
+    var gameManager = new GameManager($scope, $http, store, Analytics, commonService, $timeout);
     gameManager.startGame();
     
     $scope.clickElem = gameManager.clickElem;
@@ -176,4 +235,5 @@ function gameDevController($scope, $http, store, store, Analytics, commonService
 rogerControllers.controller('DashboardCtrl', dashboardController);
 rogerControllers.controller('GameCtrl',      gameController);
 rogerControllers.controller('WinCtrl',       winController);
-rogerControllers.controller('GameDevCtrl',      gameDevController);
+rogerControllers.controller('FailedCtrl',    failedController);
+rogerControllers.controller('GameDevCtrl',   gameDevController);

@@ -27,6 +27,7 @@ function commonServicesImpl($location, $timeout, $http) {
     $scope.goToGameDev = this.goToGameDev;
     $scope.goToGameRes = this.goToGameRes;
     $scope.goToWin = this.goToWin;
+    $scope.goToFailed = this.goToFailed;
   };
 
   this.goToDashboard = function() {
@@ -41,10 +42,11 @@ function commonServicesImpl($location, $timeout, $http) {
   this.goToGameRes = function() {
 	$location.path('/jeu-resources');
   };
-	
-
   this.goToWin = function() {
     $location.path('/win');
+  };
+  this.goToFailed = function() {
+    $location.path('/failed');
   };
   
 

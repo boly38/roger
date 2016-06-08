@@ -265,3 +265,18 @@ area {
 	padding-right: 5px;
 	font-weight: bold;
 }
+
+.componentlist {
+	/* border: 1px solid yellow; */
+}
+
+.componentlistitem {
+	float:right;
+	border: 1px solid grey;
+	padding: 3px;
+	margin: 10px;
+}
+
+.componentfound {
+	background-color: lightgreen;
+}
