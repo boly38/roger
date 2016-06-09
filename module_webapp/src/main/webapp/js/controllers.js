@@ -26,7 +26,7 @@ function GameManager($scope, $http, store, Analytics, commonService, $timeout) {
 	$scope.gameManager = this;
     $scope.maxImage = 5;
     $scope.imageNumber = 0;
-	
+    
 	this.startGame = function() {
 		$scope.gamescore = 0;
 		$scope.levelscore = 0;
@@ -108,12 +108,12 @@ function GameManager($scope, $http, store, Analytics, commonService, $timeout) {
 		}
 		console.info("levelscore:" + $scope.levelscore + "points, level duration:" + duration + " ms, successRatio: " + successRatio);
 		$scope.levelscore = Math.round($scope.gamepoints * successRatio);
-		if ($scope.levelscore <= 0) {
+		if (!$scope.icgagne && $scope.levelscore <= 0) {
 			commonService.goToFailed();
 			return;
 		}
 		if (!$scope.icgagne) {
-			$timeout($scope.gameManager.updateLevelScore, 2000);
+			$scope.levelTimeout = $timeout($scope.gameManager.updateLevelScore, 2000);
 		}
     };
 	
@@ -126,6 +126,7 @@ function GameManager($scope, $http, store, Analytics, commonService, $timeout) {
     		}
     	}
 		$scope.icgagne = true;
+		$timeout.cancel($scope.levelTimeout);
 
 		$scope.gameManager.updateLevelScore();
 
@@ -135,13 +136,13 @@ function GameManager($scope, $http, store, Analytics, commonService, $timeout) {
 		
 		// go to the next level
 		if ($scope.gameManager.hasNextLevel()) {
-			setTimeout($scope.gameManager.loadLevel, 2000);
+			$timeout($scope.gameManager.loadLevel, 2000);
     		return;
 		}
 		
 		// no next level: win the game!
 		console.info("goToWin in 2 sec");
-	    setTimeout($scope.gameManager.winNow, 2000);
+		$timeout($scope.gameManager.winNow, 2000);
     };
 
     this.winNow = function() {
