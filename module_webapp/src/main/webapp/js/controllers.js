@@ -27,6 +27,7 @@ function GameManager($scope, $http, store, Analytics, commonService, $timeout) {
     $scope.maxImage = 5;
     $scope.imageNumber = 0;
     
+    
 	this.startGame = function() {
 		$scope.gamescore = 0;
 		$scope.levelscore = 0;
@@ -73,6 +74,7 @@ function GameManager($scope, $http, store, Analytics, commonService, $timeout) {
             $scope.gamealt = success.data.alt;
             $scope.gamecomponents = success.data.components;
             $scope.gamepoints = success.data.point;
+            $scope.badclick = 0;
             if (!$scope.gamepoints) {
             	$scope.gamepoints = 404;
             }
@@ -85,7 +87,12 @@ function GameManager($scope, $http, store, Analytics, commonService, $timeout) {
         });
     }
     
-    
+    this.clickOut = function($event) {
+    	$scope.badclick++;
+		$timeout.cancel($scope.levelTimeout);
+		$scope.gameManager.updateLevelScore();
+    };
+
     this.clickElem = function($event, compId) {
     	$event.preventDefault();
     	if ($scope.ic[compId]) {
@@ -107,8 +114,9 @@ function GameManager($scope, $http, store, Analytics, commonService, $timeout) {
 			successRatio = 1 - (duration / MAX_LEVEL_TIME); 
 		}
 		console.info("levelscore:" + $scope.levelscore + "points, level duration:" + duration + " ms, successRatio: " + successRatio);
-		$scope.levelscore = Math.round($scope.gamepoints * successRatio);
+		$scope.levelscore = Math.round($scope.gamepoints * successRatio) - $scope.badclick;
 		if (!$scope.icgagne && $scope.levelscore <= 0) {
+			Analytics.trackEvent('game', 'failed game', $scope.gamescore);
 			commonService.goToFailed();
 			return;
 		}
@@ -126,9 +134,10 @@ function GameManager($scope, $http, store, Analytics, commonService, $timeout) {
     		}
     	}
 		$scope.icgagne = true;
-		$timeout.cancel($scope.levelTimeout);
 
+		$timeout.cancel($scope.levelTimeout);
 		$scope.gameManager.updateLevelScore();
+		Analytics.trackEvent('game', 'win level ' + $scope.gamealt, $scope.levelscore);
 
 		// update game score
 		$scope.gamescore += $scope.levelscore; 
@@ -141,6 +150,7 @@ function GameManager($scope, $http, store, Analytics, commonService, $timeout) {
 		}
 		
 		// no next level: win the game!
+		Analytics.trackEvent('game', 'win game', $scope.gamescore);
 		console.info("goToWin in 2 sec");
 		$timeout($scope.gameManager.winNow, 2000);
     };
@@ -177,6 +187,18 @@ function gameController($scope, $http, store, Analytics, commonService, $timeout
     gameManager.startGame();
     
     $scope.clickElem = gameManager.clickElem;
+
+    $("#imggame").on("click", function(e){
+        e.preventDefault();
+        var offset = $(this).offset();
+        var xClick = e.pageX - offset.left;
+        var yClick = e.pageY - offset.top;
+        $scope.clickimgx = xClick;
+        $scope.clickimgy = yClick;
+        console.info('x:' + xClick + ' y:' + yClick);
+        $scope.$apply();
+        gameManager.clickOut(e);
+    });
 };
 
 function winController($scope, $http, store, Analytics, commonService) {

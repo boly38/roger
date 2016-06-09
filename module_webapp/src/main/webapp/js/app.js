@@ -52,9 +52,15 @@ rogerApp.config(function($routeProvider, $httpProvider, AnalyticsProvider){
     $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
     $httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
 
+    // Analytics doc : https://www.npmjs.com/package/angular-google-analytics
     // analytics.logAllCalls(true);
-    AnalyticsProvider.setAccount('UA-1988442-17');
+    // AnalyticsProvider.setAccount('');
     AnalyticsProvider.setDomainName('rogerdemenage.ddns.net');
+    AnalyticsProvider.setAccount({
+    	  tracker: 'UA-1988442-17',
+    	  name: "rogerdemenage_ddns_net",
+    	  trackEvent: true
+    });
 })
 .run(function($rootScope, $window) {
 	console.info("run ROGER");
