@@ -33,7 +33,10 @@ function GameManager($scope, $http, store, Analytics, commonService, $timeout) {
 		$scope.levelscore = 0;
 		$scope.badclick = 0;
 		store.set('gamescore', $scope.gamescore);
-	    $scope.images = [1,2,3,4,5];
+		$scope.images = [];
+		for (var i = 1; i<$scope.maxImage ; i++) {
+			$scope.images.push(i);
+	    }
 		this.loadLevel();
 	};
 
