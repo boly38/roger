@@ -24,7 +24,7 @@ function dashboardController($scope, $http, Analytics, commonService) {
 function GameManager($scope, $http, store, Analytics, commonService, $timeout) {
 	this.scope = $scope;
 	$scope.gameManager = this;
-    $scope.maxImage = 5;
+    $scope.maxImage = 6;
     $scope.imageNumber = 0;
     
     
