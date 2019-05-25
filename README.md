@@ -1,2 +1,5 @@
-* DNS rogerdemenage.ddns.net
-* openshift v2 arrêt après 30sept : cartridge Tomcat 7 (JBoss EWS 2.0)
+# RogerDemenage
+
+Un petit jeu pour enfant conçu et réalisé par Lény (et son père).
+
+- Jeu en ligne [sur github pages](https://boly38.github.io/roger/)

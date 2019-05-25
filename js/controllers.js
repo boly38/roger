@@ -70,10 +70,10 @@ function GameManager($scope, $http, store, Analytics, commonService, $timeout) {
      */
 	this.loadLevelData = function(imageNumber) {
     	Analytics.trackPage("/GameDev/" + imageNumber,'Game-dev '  + imageNumber, {});
-        $http.get('/data/' + imageNumber + '/game.json').then(function(success){
+        $http.get('data/' + imageNumber + '/game.json').then(function(success){
             $scope.game = success.data;
             // http://stackoverflow.com/questions/19310215/angularjs-image-src-change-when-model-changes
-            $scope.gameimage="/data/" + imageNumber + "/" + success.data.image;
+            $scope.gameimage="data/" + imageNumber + "/" + success.data.image;
             $scope.gamealt = success.data.alt;
             $scope.gamecomponents = success.data.components;
             $scope.gamepoints = success.data.point;

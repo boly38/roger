@@ -87,7 +87,7 @@
 .rogermenu>nav>ul>li:first-child {
     border-left-style: none;
     /* 
-    background-image: url("../../img/dl-icon-user.png");
+    background-image: url("img/dl-icon-user.png");
     background-repeat: no-repeat;
     background-position: top left;
     background-size: 12px;
